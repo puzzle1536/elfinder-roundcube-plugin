@@ -1,0 +1,19 @@
+{
+    "name": "elfinder",
+    "description": "Plugin to embed elFinder into RoundCube",
+    "license": "GPL-3.0+",
+    "version": "0.1",
+    "type": "roundcube-plugin",
+    "homepage": "https://github.com/puzzle1536/elfinder-roundcube-plugin",
+    "authors": [
+        {
+            "name": "Puzzle",
+            "email": "puzzle1536@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+          "email": "puzzle1536@gmail.com",
+          "issues": "https://github.com/puzzle1536/elfinder-roundcube-plugin/issues"
+      }
+}
