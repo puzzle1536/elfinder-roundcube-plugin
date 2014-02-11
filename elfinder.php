@@ -12,17 +12,12 @@
  *
  */
 
-//require_once('plugins/filesystem_attachments/filesystem_attachments.php');
-
-//class elfinder extends filesystem_attachments
 class elfinder extends rcube_plugin
 {
-  public $task = 'mail';
+    public $task = 'mail';
 
-  function init()
-  {
-      $rcmail = rcmail::get_instance();
-
+    function init()
+    {
       // Include elfinder js & css
       $this->include_stylesheet($this->local_skin_path() . "/css/elfinder.min.css");
       $this->include_stylesheet($this->local_skin_path() . "/css/theme.css");
@@ -30,24 +25,40 @@ class elfinder extends rcube_plugin
       $this->include_script("elfinder.js");
 
       // Register hooks and actions
-//      $this->add_hook('template_object_messageattachments', array($this, 'attachment_elfinder'));
-      $this->add_hook('template_object_composeattachmentlist', array($this, 'attachment_elfinder'));
-      $this->register_action('plugin.elfinder.elfinder_attachments', array($this, 'save_attachements'));
+      $this->add_hook('template_object_messageattachments', array($this, 'save_attachment_elfinder'));
+      $this->register_action('plugin.elfinder.save_attachments', array($this, 'save_attachements'));
 
-  }
+      $this->add_hook('template_object_composeattachmentlist', array($this, 'add_attachment_elfinder'));
+      $this->register_action('plugin.elfinder.load_attachments', array($this, 'load_attachements'));
+    }
 
     /**
-     * Place a link/button after attachments listing to trigger download
+     * Place a link/button after attachments listing to trigger elfinder selection
      */
-    public function attachment_elfinder($p)
+    public function add_attachment_elfinder($p)
     {
-        $rcmail = rcmail::get_instance();
-
         $link = html::a(array(
             'value' => 'briefcase',
             'type' => 'button',
             'class' => 'button',
-            'onclick' => 'load_briefcase();',
+            'onclick' => 'briefcase_load(\'plugin.elfinder.load_attachments\');',
+            'style' => 'text-align:center',
+            ),
+            Q('briefcase')
+        );
+
+        $p['content'] .= $link;
+
+        return $p;
+    }
+
+    public function save_attachment_elfinder($p)
+    {
+        $link = html::a(array(
+            'value' => 'briefcase',
+            'type' => 'button',
+            'class' => 'button',
+            'onclick' => 'briefcase_save(\'plugin.elfinder.save_attachments\');',
             'style' => 'text-align:center',
             ),
             Q('briefcase')
@@ -59,11 +70,47 @@ class elfinder extends rcube_plugin
     }
 
     /**
-     * Handler for attachment download action
+     * Handler for attachment save action
      */
     public function save_attachements()
     {
         $rcmail = rcmail::get_instance();
+        $rcmail->output->reset();
+
+        $dirpath = get_input_value('_dirpath', RCUBE_INPUT_GET);
+        $uid     = get_input_value('_uid', RCUBE_INPUT_GET);
+        $message = new rcube_message(get_input_value('_uid', RCUBE_INPUT_GET));
+        $imap = $rcmail->storage;
+        $temp_dir = $rcmail->config->get('temp_dir');
+
+        foreach ($message->attachments as $part) {
+            $pid = $part->mime_id;
+            $part = $message->mime_parts[$pid];
+            $disp_name = $part->filename;
+
+//            if ($part->body) {
+//                $fp = fopen($dirpath.'/'.$disp_name, 'w');
+//                fwrite($fp, $part->body);
+//                fclose($fp);
+//            } else {
+                $fp = fopen($dirpath.'/'.$disp_name, 'w');
+                $imap->get_message_part($message->uid, $part->mime_id, $part, null, $fp, true);
+                fclose($fp);
+//            }
+
+        }
+
+        $rcmail->output->show_message('Attachements saved to '.$dirpath, 'confirmation');
+        $rcmail->output->send('iframe');
+    }
+
+    /**
+     * Handler for attachment load action
+     */
+    public function load_attachements()
+    {
+        $rcmail = rcmail::get_instance();
+
         $filepath = get_input_value('_filepath', RCUBE_INPUT_GET);
         $uploadid = get_input_value('_uploadid', RCUBE_INPUT_GET);
 
@@ -83,28 +130,25 @@ class elfinder extends rcube_plugin
         $rcmail->output->reset();
 
         if (is_file($filepath)) {
+
+            // Copy file to temporary location
+            $temp_dir = $rcmail->config->get('temp_dir');
+            $tmpfname = tempnam($temp_dir, 'rcmAttmnt');
+            copy($filepath, $tmpfname);
+
             $attachment = array(
-              'path' => $filepath,
+              'path' => $tmpfname,
               'size' => filesize($filepath),
               'name' => basename($filepath),
               'mimetype' => rc_mime_content_type($filepath, basename($filepath)),
               'group' => $COMPOSE_ID,
             );
 
-//            $attachment = $rcmail->plugins->exec_hook('attachment_save', $attachment);
-
-        $group = $args['group'];
-
-        $userid = rcmail::get_instance()->user->ID;
-        list($usec, $sec) = explode(' ', microtime());
-        $attachment['id'] = preg_replace('/[^0-9]/', '', $userid . $sec . $usec);
-        $attachment['status'] = true;
-
+            $attachment = $rcmail->plugins->exec_hook('attachment_save', $attachment);
 
             $id = $attachment['id'];
 
             // store new attachment in session
-            unset($attachment['status'], $attachment['abort']);
             $rcmail->session->append($SESSION_KEY.'.attachments', $id, $attachment);
    
             if (($icon = $COMPOSE['deleteicon']) && is_file($icon)) {
