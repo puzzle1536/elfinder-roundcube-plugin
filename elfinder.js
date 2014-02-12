@@ -31,7 +31,7 @@ if (window.rcmail) {
             lang : 'en',
             width : 800,
             rememberLastDir: true,
-            onlyMimes: ['directory'],
+//            onlyMimes: ['directory'],
             getFileCallback : function(folder, fm) {
                 rcmail.http_request(elfinder_function,
                                     { _dirpath:folder,

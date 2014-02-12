@@ -19,7 +19,7 @@ class elfinder extends rcube_plugin
     function init()
     {
       // Include elfinder js & css
-      $this->include_stylesheet($this->local_skin_path() . "/css/elfinder.min.css");
+      $this->include_stylesheet($this->local_skin_path() . "/css/elfinder.full.css");
       $this->include_stylesheet($this->local_skin_path() . "/css/theme.css");
       $this->include_script("js/elfinder.min.js");
       $this->include_script("elfinder.js");
@@ -88,19 +88,19 @@ class elfinder extends rcube_plugin
             $part = $message->mime_parts[$pid];
             $disp_name = $part->filename;
 
-//            if ($part->body) {
-//                $fp = fopen($dirpath.'/'.$disp_name, 'w');
-//                fwrite($fp, $part->body);
-//                fclose($fp);
-//            } else {
+            if ($part->body) {
+                $fp = fopen($dirpath.'/'.$disp_name, 'w');
+                fwrite($fp, $part->body);
+                fclose($fp);
+            } else {
                 $fp = fopen($dirpath.'/'.$disp_name, 'w');
                 $imap->get_message_part($message->uid, $part->mime_id, $part, null, $fp, true);
                 fclose($fp);
-//            }
+            }
 
+            $rcmail->output->show_message('Attachements saved to '.$dirpath, 'confirmation');
         }
 
-        $rcmail->output->show_message('Attachements saved to '.$dirpath, 'confirmation');
         $rcmail->output->send('iframe');
     }
 
