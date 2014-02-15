@@ -126,9 +126,9 @@ class elfinder extends rcube_plugin
           die("Invalid session var!");
         }
 
-
         $rcmail->output->reset();
 
+        $filepath = str_replace("%20", " ", $filepath);
         if (is_file($filepath)) {
 
             // Copy file to temporary location
@@ -185,8 +185,12 @@ class elfinder extends rcube_plugin
             $rcmail->output->command('auto_save_start', false);
             $rcmail->output->send('iframe');
 
-        }
+        } else {
 
+            $rcmail->output->show_message("\"$filepath\" is not a file", 'error');
+            $rcmail->output->send('iframe');
+
+        }
     }
 
 
