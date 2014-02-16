@@ -1,0 +1,29 @@
+
+#elfindercontentframe {
+	border: 0;
+	border-radius: 4px;
+}
+
+#mainscreen .readtext {
+	margin: 0 auto;
+}
+
+#elfindertoolbar {
+	position: absolute;
+	top: -6px;
+	left: 0;
+	height: 40px;
+	white-space: nowrap;
+}
+
+#taskbar a.button-elfinder span.button-inner {
+	background: url(elfinder.png) 0 0 no-repeat;
+	height: 19px;
+}
+
+#taskbar a.button-elfinder:hover span.button-inner,
+#taskbar a.button-elfinder.button-selected span.button-inner {
+	background: url(elfinder.png) 0 -24px no-repeat;
+	height: 19px;
+}
+

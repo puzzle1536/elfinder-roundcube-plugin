@@ -2,13 +2,9 @@ var dialog;
 var displayed;
 
 if (window.rcmail) {
-    $(document).ready(function() {
-        $( "#mainscreen" ).append( "<div id=elfinder class=popupmenu></div>" );
-    })
 
     var briefcase_load = function(elfinder_function) {
        if (!dialog) {
-           console.log('dialog create');
 
            dialog = $('#elfinder').elfinder({
                    url : 'plugins/elfinder/php/connector.php',
@@ -43,7 +39,6 @@ if (window.rcmail) {
 
     var briefcase_save = function(elfinder_function) {
        if (!dialog) {
-           console.log('dialog create');
 
            dialog = $('#elfinder').elfinder({
                    url : 'plugins/elfinder/php/connector.php',
@@ -75,4 +70,7 @@ if (window.rcmail) {
         }
     }
 
+    $(document).ready(function() {
+        $( "#mainscreen" ).append( "<div id=elfinder class=popupmenu></div>" );
+    })
 }

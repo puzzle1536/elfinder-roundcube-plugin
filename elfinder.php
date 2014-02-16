@@ -14,10 +14,18 @@
 
 class elfinder extends rcube_plugin
 {
-    public $task = 'mail';
+//    public $task = 'mail';
+    public $task = '?(?!login|logout).*';
 
     function init()
     {
+      $this->register_task('elfinder');
+
+      // register actions
+      $this->register_action('index', array($this, 'action'));
+
+      $this->add_texts('localization/', false);
+
       // Include elfinder js & css
       $this->include_stylesheet($this->local_skin_path() . "/css/elfinder.full.css");
       $this->include_stylesheet($this->local_skin_path() . "/css/theme.css");
@@ -30,6 +38,31 @@ class elfinder extends rcube_plugin
 
       $this->add_hook('template_object_composeattachmentlist', array($this, 'add_attachment_elfinder'));
       $this->register_action('plugin.elfinder.load_attachments', array($this, 'load_attachements'));
+
+      // add taskbar button
+      $this->add_button(array(
+          'command'    => 'elfinder',
+          'class'      => 'button-elfinder',
+          'classsel'   => 'button-elfinder button-selected',
+          'innerclass' => 'button-inner',
+          'label'      => 'elfinder.elfinder',
+      ), 'taskbar');
+
+      // add style for taskbar button (must be here) and Help UI
+      $skin_path = $this->local_skin_path();
+      if (is_file($this->home . "/$skin_path/elfinder.css")) {
+          $this->include_stylesheet("$skin_path/elfinder.css");
+      }
+
+    }
+
+    function action()
+    {
+        $rcmail = rcmail::get_instance();
+
+        $rcmail->output->set_pagetitle('File Manager');
+
+        $rcmail->output->send('elfinder.elfinder');
     }
 
     /**

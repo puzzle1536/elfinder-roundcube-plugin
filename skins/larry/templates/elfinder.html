@@ -1,0 +1,35 @@
+<roundcube:object name="doctype" value="html5" />
+<html>
+<head>
+<title><roundcube:object name="pagetitle" /></title>
+<roundcube:include file="/includes/links.html" />
+</head>
+<script>
+if (window.rcmail) {
+    $(document).ready(function() {
+           dialog = $('#mainscreen').elfinder({
+                   url : 'plugins/elfinder/php/connector.php',
+                   lang : 'en',
+            });
+
+    })
+}
+</script>
+<body>
+
+<roundcube:include file="/includes/header.html" />
+
+<div id="mainscreen">
+
+<div id="helptoolbar" class="toolbar">
+</div>
+
+<div id="pluginbody" class="uibox offset">
+</div>
+
+</div>
+
+<roundcube:include file="/includes/footer.html" />
+
+</body>
+</html>
