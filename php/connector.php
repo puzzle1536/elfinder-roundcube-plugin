@@ -35,7 +35,7 @@ $opts = array(
 		array(
 			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
 			'path'          => '/var/www/webdav/Perso',         // path to files (REQUIRED)
-			'URL'           => '/var/www/webdav/Perso', // URL to files (REQUIRED)
+			'URL'           => 'https://webdav.lafaury.org/Perso', // URL to files (REQUIRED)
 			'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
 		)
 	)
