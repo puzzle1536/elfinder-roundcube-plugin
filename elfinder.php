@@ -19,13 +19,6 @@ class elfinder extends rcube_plugin
 
     function init()
     {
-      $this->register_task('elfinder');
-
-      // register actions
-      $this->register_action('index', array($this, 'action'));
-
-      $this->add_texts('localization/', false);
-
       // Include elfinder js & css
       $this->include_stylesheet($this->local_skin_path() . "/css/elfinder.full.css");
       $this->include_stylesheet($this->local_skin_path() . "/css/theme.css");
@@ -37,7 +30,12 @@ class elfinder extends rcube_plugin
       $this->register_action('plugin.elfinder.save_attachments', array($this, 'save_attachements'));
 
       $this->add_hook('template_object_composeattachmentlist', array($this, 'add_attachment_elfinder'));
-      $this->register_action('plugin.elfinder.load_attachments', array($this, 'load_attachements'));
+      $this->register_action('plugin.elfinder.load_attachments', array($this, 'load_attachments'));
+
+      // register actions
+      $this->register_task('elfinder');
+      $this->register_action('index', array($this, 'action'));
+      $this->add_texts('localization/', false);
 
       // add taskbar button
       $this->add_button(array(
@@ -140,7 +138,7 @@ class elfinder extends rcube_plugin
     /**
      * Handler for attachment load action
      */
-    public function load_attachements()
+    public function load_attachments()
     {
         $rcmail = rcmail::get_instance();
 
