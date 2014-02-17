@@ -9,7 +9,8 @@ if (window.rcmail) {
            dialog = $('#elfinder').elfinder({
                    url : 'plugins/elfinder/php/connector.php',
                    lang : 'en',
-                   width : 800,
+                   width: window.innerWidth-100,
+                   height: window.innerHeight-100,
                    commandsOptions : {
                        getfile : {
                            folders : false,
@@ -43,7 +44,8 @@ if (window.rcmail) {
            dialog = $('#elfinder').elfinder({
                    url : 'plugins/elfinder/php/connector.php',
                    lang : 'en',
-                   width : 800,
+                   width: window.innerWidth-100,
+                   height: window.innerHeight-100,
                    commandsOptions : {
                        getfile : {
                            folders : true,
@@ -71,6 +73,6 @@ if (window.rcmail) {
     }
 
     $(document).ready(function() {
-        $( "#mainscreen" ).append( "<div id=elfinder class=popupmenu></div>" );
+        $( "#mainscreen" ).append( "<div id=\"elfinder\" class=\"popupmenu elfinder-popup\"></div>" );
     })
 }
