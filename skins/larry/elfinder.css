@@ -3,3 +3,24 @@
 	left: 40px;
 }
 
+.elfinder-contextmenu .elfinder-contextmenu-item span { font-size:1em; }
+
+.elfinder-cwd-view-icons .elfinder-cwd-filename { font-size:1em; }
+.elfinder-cwd-view-list td { font-size:1em; }
+
+.std42-dialog .ui-dialog-titlebar { font-size:1em; }
+.std42-dialog .ui-dialog-content { font-size:1em; }
+.std42-dialog .ui-dialog-buttonpane { font-size:1em; }
+.elfinder-info-tb { font-size:1em; }
+.elfinder-upload-dropbox { font-size:1.2em; }
+.elfinder-upload-dialog-or { font-size:1.2em; }
+.dialogelfinder .dialogelfinder-drag { font-size:1em; }
+.elfinder .elfinder-navbar { font-size:1em; }
+.elfinder-place-drag .elfinder-navbar-dir { font-size:1em;}
+.elfinder-quicklook-title { font-size:1em; }
+.elfinder-quicklook-info-data { font-size:1em; }
+.elfinder-quicklook-preview-text-wrapper { font-size:1em; }
+.elfinder-button-menu-item { font-size:1em; }
+.elfinder-button-search input { font-size:1em; }
+.elfinder-statusbar div { font-size:1em; }
+.elfinder-drag-num { font-size:12px; }

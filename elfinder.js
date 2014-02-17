@@ -9,8 +9,8 @@ if (window.rcmail) {
            dialog = $('#elfinder').elfinder({
                    url : 'plugins/elfinder/php/connector.php',
                    lang : 'en',
-                   width: window.innerWidth-100,
-                   height: window.innerHeight-100,
+                   width:  $("#mainscreen").innerWidth()-100,
+                   height: $("#mainscreen").innerHeight()-100,
                    commandsOptions : {
                        getfile : {
                            folders : false,
@@ -44,9 +44,9 @@ if (window.rcmail) {
            dialog = $('#elfinder').elfinder({
                    url : 'plugins/elfinder/php/connector.php',
                    lang : 'en',
-                   width: window.innerWidth-100,
-                   height: window.innerHeight-100,
-                   commandsOptions : {
+                   width:  $("#mainscreen").innerWidth()-100,
+                   height: $("#mainscreen").innerHeight()-100,
+                   commands: {
                        getfile : {
                            folders : true,
                        }
