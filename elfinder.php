@@ -22,6 +22,7 @@ class elfinder extends rcube_plugin
       // Include elfinder js & css
       $this->include_stylesheet($this->local_skin_path() . "/css/elfinder.full.css");
       $this->include_stylesheet($this->local_skin_path() . "/css/theme.css");
+      $this->include_stylesheet($this->local_skin_path() . "/elfinder.css");
       $this->include_script("js/elfinder.min.js");
       $this->include_script("elfinder.js");
 
@@ -45,12 +46,6 @@ class elfinder extends rcube_plugin
           'innerclass' => 'button-inner',
           'label'      => 'elfinder.elfinder',
       ), 'taskbar');
-
-      // add style for taskbar button (must be here) and Help UI
-      $skin_path = $this->local_skin_path();
-      if (is_file($this->home . "/$skin_path/elfinder.css")) {
-          $this->include_stylesheet("$skin_path/elfinder.css");
-      }
 
     }
 
@@ -78,10 +73,9 @@ class elfinder extends rcube_plugin
 
     public function save_attachment_elfinder($p)
     {
-        $p['content'] = "<div style=\"text-align:center; margin-bottom:20px\">".
+        $p['content'] .= "<div style=\"text-align:center; margin-bottom:20px\">".
                         "<input type=\"button\" class=\"button\" value=\"Briefcase\"".
-                        "onclick=\"briefcase_save('plugin.elfinder.save_attachments');return false\"></div>".
-                        $p['content'];
+                        "onclick=\"briefcase_save('plugin.elfinder.save_attachments');return false\"></div>";
 
 
         return $p;
