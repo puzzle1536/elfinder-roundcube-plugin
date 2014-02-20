@@ -11,6 +11,10 @@ if (window.rcmail) {
                    lang : 'en',
                    width:  $("#mainscreen").innerWidth()-100,
                    height: $("#mainscreen").innerHeight()-100,
+                   commands : [
+                        'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook', 
+                        'upload', 'edit', 'search', 'info', 'view', 'help', 'sort'
+                   ],
                    commandsOptions : {
                        getfile : {
                            folders : false,
@@ -46,11 +50,15 @@ if (window.rcmail) {
                    lang : 'en',
                    width:  $("#mainscreen").innerWidth()-100,
                    height: $("#mainscreen").innerHeight()-100,
-                   commands: {
+                   commandsOptions : {
                        getfile : {
                            folders : true,
                        }
                    },
+                   commands : [
+                        'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook', 
+                        'upload', 'edit', 'search', 'info', 'view', 'help', 'sort'
+                   ],
                    getFileCallback : function(folder, fm) {
                     
                     rcmail.http_request(elfinder_function,
