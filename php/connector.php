@@ -2,6 +2,8 @@
 
 error_reporting(0); // Set E_ALL for debuging
 
+include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'../config.inc.php';
+
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinder.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeDriver.class.php';
@@ -34,8 +36,8 @@ $opts = array(
 	'roots' => array(
 		array(
 			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'          => '/var/www/webdav/Perso',         // path to files (REQUIRED)
-			'URL'           => 'https://webdav.lafaury.org/Perso', // URL to files (REQUIRED)
+			'path'          => $rcmail_config['files_path'],         // path to files (REQUIRED)
+			'URL'           => $rcmail_config['files_url'], // URL to files (REQUIRED)
 			'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
 		)
 	)

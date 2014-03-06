@@ -17,6 +17,7 @@ if (window.rcmail) {
                    ],
                    commandsOptions : {
                        getfile : {
+                           oncomplete : 'close',
                            folders : false,
                        }
                    },
@@ -52,6 +53,7 @@ if (window.rcmail) {
                    height: $("#mainscreen").innerHeight()-100,
                    commandsOptions : {
                        getfile : {
+                           oncomplete : 'close',
                            folders : true,
                        }
                    },

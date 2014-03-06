@@ -47,6 +47,9 @@ class elfinder extends rcube_plugin
           'label'      => 'elfinder.elfinder',
       ), 'taskbar');
 
+      // Load plugin's config file
+      $this->load_config();
+
     }
 
     function action()
@@ -63,9 +66,8 @@ class elfinder extends rcube_plugin
      */
     public function add_attachment_elfinder($p)
     {
-        $p['content'] = "<div style=\"text-align:center; margin-bottom:20px\">".
-                        "<input type=\"button\" class=\"button\" value=\"Briefcase\"".
-                        "onclick=\"briefcase_load('plugin.elfinder.load_attachments');return false\"></div>".
+        $p['content'] = "<input type=\"button\" class=\"button\" value=\"Briefcase\"".
+                        "onclick=\"briefcase_load('plugin.elfinder.load_attachments');return false\">".
                         $p['content'];
 
         return $p;
@@ -88,7 +90,10 @@ class elfinder extends rcube_plugin
         $rcmail = rcmail::get_instance();
         $rcmail->output->reset();
 
-        $dirpath = get_input_value('_dirpath', RCUBE_INPUT_GET);
+        $files_path = $rcmail->config->get('files_path');
+        $files_url  = $rcmail->config->get('files_url');
+
+        $dirpath = str_replace($files_url, $files_path, get_input_value('_dirpath', RCUBE_INPUT_GET));
         $uid     = get_input_value('_uid', RCUBE_INPUT_GET);
         $message = new rcube_message(get_input_value('_uid', RCUBE_INPUT_GET));
         $imap = $rcmail->storage;
@@ -122,7 +127,10 @@ class elfinder extends rcube_plugin
     {
         $rcmail = rcmail::get_instance();
 
-        $filepath = get_input_value('_filepath', RCUBE_INPUT_GET);
+        $files_path = $rcmail->config->get('files_path');
+        $files_url  = $rcmail->config->get('files_url');
+
+        $filepath = str_replace($files_url, $files_path, get_input_value('_filepath', RCUBE_INPUT_GET));
         $uploadid = get_input_value('_uploadid', RCUBE_INPUT_GET);
 
         $COMPOSE_ID = get_input_value('_id', RCUBE_INPUT_GPC);
