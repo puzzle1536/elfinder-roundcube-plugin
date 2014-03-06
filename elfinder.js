@@ -50,6 +50,7 @@ if (window.rcmail) {
                                                  _filepath:files[id],
                                                });
                        }
+                       displayed = false;
                 }
             });
             displayed = true;
@@ -98,10 +99,11 @@ if (window.rcmail) {
                    },
                    getFileCallback : function(folder, fm) {
                     
-                    rcmail.http_request(elfinder_function,
+                   rcmail.http_request(elfinder_function,
                                         { _dirpath:folder,
                                           _mbox:rcmail.env.mailbox,
                                           _uid:rcmail.env.uid });
+                   displayed = false;
     
                 }
             });
@@ -120,4 +122,11 @@ if (window.rcmail) {
     $(document).ready(function() {
         $( "#mainscreen" ).append( "<div id=\"elfinder\" class=\"popupmenu elfinder-popup\"></div>" );
     })
+
+   document.onkeypress = function(evt) {
+       if (displayed && evt.keyCode == 27) {
+           dialog.elfinder('hide');
+           displayed = false;
+       }
+    }
 }
