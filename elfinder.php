@@ -78,7 +78,6 @@ class elfinder extends rcube_plugin
         $p['content'] .= "<input type=\"button\" class=\"button\" value=\"Briefcase\"".
                          "onclick=\"briefcase_save('plugin.elfinder.save_attachments');return false\">";
 
-
         return $p;
     }
 
@@ -93,31 +92,40 @@ class elfinder extends rcube_plugin
         $files_path = $rcmail->config->get('files_path');
         $files_url  = $rcmail->config->get('files_url');
 
-        $dirpath = str_replace($files_url, $files_path, get_input_value('_dirpath', RCUBE_INPUT_GET));
+        $dirpath = $files_path . str_replace($files_url, "", get_input_value('_dirpath', RCUBE_INPUT_GET));
+        $dirpath = str_replace("%20", " ", $dirpath);
+        $dirpath = str_replace("..", "", $dirpath);
+
         $uid     = get_input_value('_uid', RCUBE_INPUT_GET);
         $message = new rcube_message(get_input_value('_uid', RCUBE_INPUT_GET));
         $imap = $rcmail->storage;
         $temp_dir = $rcmail->config->get('temp_dir');
 
-        foreach ($message->attachments as $part) {
-            $pid = $part->mime_id;
-            $part = $message->mime_parts[$pid];
-            $disp_name = $part->filename;
-
-            if ($part->body) {
-                $fp = fopen($dirpath.'/'.$disp_name, 'w');
-                fwrite($fp, $part->body);
-                fclose($fp);
-            } else {
-                $fp = fopen($dirpath.'/'.$disp_name, 'w');
-                $imap->get_message_part($message->uid, $part->mime_id, $part, null, $fp, true);
-                fclose($fp);
+        if (is_dir($dirpath)) {
+            foreach ($message->attachments as $part) {
+                $pid = $part->mime_id;
+                $part = $message->mime_parts[$pid];
+                $disp_name = $part->filename;
+         
+                if ($part->body) {
+                    $fp = fopen($dirpath.'/'.$disp_name, 'w');
+                    fwrite($fp, $part->body);
+                    fclose($fp);
+                } else {
+                    $fp = fopen($dirpath.'/'.$disp_name, 'w');
+                    $imap->get_message_part($message->uid, $part->mime_id, $part, null, $fp, true);
+                    fclose($fp);
+                }
+         
+                $rcmail->output->show_message('Attachements saved to '.$dirpath, 'confirmation');
+                $rcmail->output->send('iframe');
             }
+        } else {
 
-            $rcmail->output->show_message('Attachements saved to '.$dirpath, 'confirmation');
+            $rcmail->output->show_message("\"$filepath\" is not a folder", 'error');
+            $rcmail->output->send('iframe');
+
         }
-
-        $rcmail->output->send('iframe');
     }
 
     /**
@@ -130,7 +138,10 @@ class elfinder extends rcube_plugin
         $files_path = $rcmail->config->get('files_path');
         $files_url  = $rcmail->config->get('files_url');
 
-        $filepath = str_replace($files_url, $files_path, get_input_value('_filepath', RCUBE_INPUT_GET));
+        $filepath = $files_path . str_replace($files_url, "", get_input_value('_filepath', RCUBE_INPUT_GET));
+        $filepath = str_replace("%20", " ", $filepath);
+        $filepath = str_replace("..", "", $filepath);
+
         $uploadid = get_input_value('_uploadid', RCUBE_INPUT_GET);
 
         $COMPOSE_ID = get_input_value('_id', RCUBE_INPUT_GPC);
@@ -147,7 +158,6 @@ class elfinder extends rcube_plugin
 
         $rcmail->output->reset();
 
-        $filepath = str_replace("%20", " ", $filepath);
         if (is_file($filepath)) {
 
             // Copy file to temporary location

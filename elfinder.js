@@ -12,9 +12,23 @@ if (window.rcmail) {
                    width:  $("#mainscreen").innerWidth()-100,
                    height: $("#mainscreen").innerHeight()-100,
                    commands : [
-                        'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook', 
+                        'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile',
                         'upload', 'edit', 'search', 'info', 'view', 'help', 'sort'
                    ],
+                   defaultView : 'list',
+                   contextmenu : {
+                       // navbarfolder menu
+                       navbar : ['open', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', '|', 'info'],
+                   
+                       // current directory menu
+                       cwd    : ['reload', 'back', '|', 'upload', 'mkdir', 'mkfile', 'paste', '|', 'info'],
+                   
+                       // current directory file menu
+                       files  : [
+                           'getfile', '|','open', '|', 'download', '|', 'copy', 'cut', 'paste', 'duplicate', '|',
+                           'rm', '|', 'edit', 'rename', 'resize', '|', 'archive', 'extract', '|', 'info'
+                       ]
+                   },
                    commandsOptions : {
                        getfile : {
                            oncomplete : 'close',
@@ -58,6 +72,7 @@ if (window.rcmail) {
                    lang : 'en',
                    width:  $("#mainscreen").innerWidth()-100,
                    height: $("#mainscreen").innerHeight()-100,
+                   defaultView : 'list',
                    commandsOptions : {
                        getfile : {
                            oncomplete : 'close',
@@ -65,9 +80,22 @@ if (window.rcmail) {
                        }
                    },
                    commands : [
-                        'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook', 
+                        'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile',
                         'upload', 'edit', 'search', 'info', 'view', 'help', 'sort'
                    ],
+                   contextmenu : {
+                       // navbarfolder menu
+                       navbar : ['open', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', '|', 'info'],
+                   
+                       // current directory menu
+                       cwd    : ['reload', 'back', '|', 'getfile', 'mkdir', '|', 'info'],
+                   
+                       // current directory file menu
+                       files  : [
+                           'open', '|','getfile', '|', 'download', '|', 'copy', 'cut', 'paste', 'duplicate', '|',
+                           'rm', '|', 'edit', 'rename', 'resize', '|', 'archive', 'extract', '|', 'info'
+                       ]
+                   },
                    getFileCallback : function(folder, fm) {
                     
                     rcmail.http_request(elfinder_function,

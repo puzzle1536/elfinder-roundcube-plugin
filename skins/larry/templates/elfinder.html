@@ -10,8 +10,15 @@ if (window.rcmail) {
            dialog = $('#mainscreen').elfinder({
                    url : 'plugins/elfinder/php/connector.php',
                    lang : 'en',
+                   defaultView : 'list',
                    width: $("#mainscreen").innerWidth()-2,
                    height: $("#mainscreen").innerHeight()-2,
+                   commands : [
+                       'open', 'reload', 'home', 'up', 'back', 'forward',
+                       'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy', 
+                       'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help',
+                       'resize', 'sort'
+                   ],
             });
 
     })
