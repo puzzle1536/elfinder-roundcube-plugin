@@ -18,17 +18,24 @@ if (window.rcmail) {
                    commandsOptions : {
                        getfile : {
                            oncomplete : 'close',
+                           multiple : true,
                            folders : false,
-                       }
+                       },
+                       upload : {
+                           ui : 'uploadbutton'
+                       },
+
                    },
                    getFileCallback : function(files, fm) {
                     
-                       ts = new Date().getTime()
-                       rcmail.http_request(elfinder_function,
-                                           { _id:rcmail.env.compose_id,
-                                             _uploadid:ts,
-                                             _filepath:files,
-                                           });
+                       for (id in files) {
+                           ts = new Date().getTime()
+                           rcmail.http_request(elfinder_function,
+                                               { _id:rcmail.env.compose_id,
+                                                 _uploadid:ts,
+                                                 _filepath:files[id],
+                                               });
+                       }
                 }
             });
             displayed = true;
