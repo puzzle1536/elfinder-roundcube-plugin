@@ -123,10 +123,13 @@ if (window.rcmail) {
         $( "#mainscreen" ).append( "<div id=\"elfinder\" class=\"popupmenu elfinder-popup\"></div>" );
     })
 
-   document.onkeypress = function(evt) {
+   grab_excape_key = function(evt) {
+       console.log('grab_excape_key');
        if (displayed && evt.keyCode == 27) {
            dialog.elfinder('hide');
            displayed = false;
        }
     }
+
+   window.parent.onkeypress = grab_excape_key;
 }

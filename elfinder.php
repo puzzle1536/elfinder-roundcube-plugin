@@ -76,7 +76,7 @@ class elfinder extends rcube_plugin
     public function save_attachment_elfinder($p)
     {
         $p['content'] .= "<input type=\"button\" class=\"button\" value=\"Briefcase\"".
-                         "onclick=\"briefcase_save('plugin.elfinder.save_attachments');return false\">";
+                         "onclick=\"window.parent.briefcase_save('plugin.elfinder.save_attachments');return false\">";
 
         return $p;
     }
