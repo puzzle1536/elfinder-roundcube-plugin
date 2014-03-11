@@ -5,6 +5,8 @@ if (window.rcmail) {
 
     var briefcase_load = function(elfinder_function) {
        if (!dialog) {
+           // Somebody clicked on the "briefcase" button for the 1st time
+           // Just open the elfinder window
 
            dialog = $('#elfinder').elfinder({
                    url : 'plugins/elfinder/php/connector.php',
@@ -44,7 +46,7 @@ if (window.rcmail) {
                     
                        for (id in files) {
                            ts = new Date().getTime()
-                           rcmail.http_request(elfinder_function,
+                           rcmail.http_request('plugin.elfinder.load_attachments',
                                                { _id:rcmail.env.compose_id,
                                                  _uploadid:ts,
                                                  _filepath:files[id],
@@ -55,6 +57,7 @@ if (window.rcmail) {
             });
             displayed = true;
         } else {
+           // Somebody clicked on the "briefcase" button, toggle display
            if (!displayed) {
                dialog.elfinder('show');
                displayed = true;
@@ -65,8 +68,10 @@ if (window.rcmail) {
         }
     }
 
-    var briefcase_save = function(elfinder_function) {
+    var briefcase_save = function(msg_uid) {
        if (!dialog) {
+           // Somebody clicked on the "briefcase" button for the 1st time
+           // Just open the elfinder window
 
            dialog = $('#elfinder').elfinder({
                    url : 'plugins/elfinder/php/connector.php',
@@ -99,16 +104,16 @@ if (window.rcmail) {
                    },
                    getFileCallback : function(folder, fm) {
                     
-                   rcmail.http_request(elfinder_function,
+                   rcmail.http_request('plugin.elfinder.save_attachments',
                                         { _dirpath:folder,
-                                          _mbox:rcmail.env.mailbox,
-                                          _uid:rcmail.env.uid });
+                                          _uid:msg_uid });
                    displayed = false;
     
                 }
             });
             displayed = true;
         } else {
+           // Somebody clicked on the "briefcase" button, toggle display
            if (!displayed) {
                dialog.elfinder('show');
                displayed = true;
@@ -123,13 +128,15 @@ if (window.rcmail) {
         $( "#mainscreen" ).append( "<div id=\"elfinder\" class=\"popupmenu elfinder-popup\"></div>" );
     })
 
-   grab_excape_key = function(evt) {
-       console.log('grab_excape_key');
-       if (displayed && evt.keyCode == 27) {
-           dialog.elfinder('hide');
-           displayed = false;
-       }
+
+    // Note this function will be called from both main window and iframe
+    var grab_excape_key = function(evt) {
+        if (window.parent.displayed && evt.keyCode == 27) {
+            window.parent.dialog.elfinder('hide');
+            window.parent.displayed = false;
+        }
     }
 
-   window.parent.onkeypress = grab_excape_key;
+    window.onkeypress = grab_excape_key;
+
 }
