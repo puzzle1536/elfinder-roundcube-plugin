@@ -1,5 +1,6 @@
 var dialog;
 var displayed;
+var attachment_id = 0;
 
 if (window.rcmail) {
 
@@ -106,7 +107,8 @@ if (window.rcmail) {
                     
                    rcmail.http_request('plugin.elfinder.save_attachments',
                                         { _dirpath:folder,
-                                          _uid:msg_uid });
+                                          _uid:msg_uid,
+                                          _attachment_id:attachment_id });
                    displayed = false;
     
                 }
@@ -126,6 +128,19 @@ if (window.rcmail) {
 
     $(document).ready(function() {
         $( "#mainscreen" ).append( "<div id=\"elfinder\" class=\"popupmenu elfinder-popup\"></div>" );
+
+        rcmail.register_command('briefcase-save-all', function() {
+             attachment_id =  0;
+             window.parent.briefcase_save(rcmail.env.uid);
+        }, true);
+
+        rcmail.register_command('briefcase-save', function() {
+             window.parent.briefcase_save(rcmail.env.uid);
+        }, true);
+
+        // Add event Listener to retrieve attachment id
+        rcmail.addEventListener('menu-open', function(p) {attachment_id = p.props.id;});
+
     })
 
 

@@ -27,11 +27,10 @@ class elfinder extends rcube_plugin
       $this->include_script("elfinder.js");
 
       // Register hooks and actions
-      $this->add_hook('template_object_messageattachments', array($this, 'save_attachment_elfinder'));
       $this->register_action('plugin.elfinder.save_attachments', array($this, 'save_attachements'));
+      $this->register_action('plugin.elfinder.load_attachments', array($this, 'load_attachments'));
 
       $this->add_hook('template_object_composeattachmentlist', array($this, 'add_attachment_elfinder'));
-      $this->register_action('plugin.elfinder.load_attachments', array($this, 'load_attachments'));
 
       // register actions
       $this->register_task('elfinder');
@@ -46,6 +45,30 @@ class elfinder extends rcube_plugin
           'innerclass' => 'button-inner',
           'label'      => 'elfinder.elfinder',
       ), 'taskbar');
+
+      // add button to messagemenu
+      $this->add_button(array(
+          'id'         => 'messagemenubriefcase',
+          'type'       => 'link',
+          'label'      => 'elfinder.save_all',
+          'name'       => 'elfinder',
+          'command'    => 'briefcase-save-all',
+          'class'      => 'icon active',
+          'innerclass' => 'icon briefcase',
+          'wrapper'    => 'li',
+      ), 'messagemenu');
+
+      // add button to attachmentmenu
+      $this->add_button(array(
+          'id'         => 'attachmenubriefcase',
+          'type'       => 'link',
+          'label'      => 'elfinder.briefcase',
+          'name'       => 'elfinder',
+          'command'    => 'briefcase-save',
+          'class'      => 'icon active',
+          'innerclass' => 'icon briefcase',
+          'wrapper'    => 'li',
+      ), 'attachmentmenu');
 
       // Load plugin's config file
       $this->load_config();
@@ -72,15 +95,6 @@ class elfinder extends rcube_plugin
         return $p;
     }
 
-    public function save_attachment_elfinder($p)
-    {
-        $p['content'] .= "<input type=\"button\" class=\"button\" value=\"Briefcase\"".
-                         "onclick=\"window.parent.briefcase_save(rcmail.env.uid);".
-                         "return false\">";
-
-        return $p;
-    }
-
     /**
      * Handler for attachment save action
      */
@@ -98,15 +112,20 @@ class elfinder extends rcube_plugin
         $dirpath = str_replace("..", "", $dirpath);
 
         $uid     = get_input_value('_uid', RCUBE_INPUT_GET);
+        $attach_id = get_input_value('_attachment_id', RCUBE_INPUT_GET);
         $message = new rcube_message($uid);
         $imap = $rcmail->storage;
 
         if (is_dir($dirpath)) {
             foreach ($message->attachments as $part) {
                 $pid = $part->mime_id;
+
+                if ($attach_id && ($pid != $attach_id))
+					continue;
+
                 $part = $message->mime_parts[$pid];
                 $disp_name = $part->filename;
-         
+                
                 if ($part->body) {
                     $fp = fopen($dirpath.'/'.$disp_name, 'w');
                     fwrite($fp, $part->body);
@@ -116,8 +135,8 @@ class elfinder extends rcube_plugin
                     $imap->get_message_part($message->uid, $part->mime_id, $part, null, $fp, true);
                     fclose($fp);
                 }
+                $rcmail->output->show_message("\"".$disp_name."\" saved to ".$dirpath, 'confirmation');
             }
-            $rcmail->output->show_message($pid." attachements saved to ".$dirpath, 'confirmation');
         } else {
             $rcmail->output->show_message("\"$filepath\" is not a folder", 'error');
         }

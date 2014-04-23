@@ -18,5 +18,7 @@
 
 $labels = array();
 $labels['elfinder'] = 'File Manager';
+$labels['briefcase'] = 'Briefcase';
+$labels['save_all'] = 'Briefcase';
 
 ?>
