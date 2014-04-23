@@ -50,7 +50,7 @@ if (window.rcmail) {
                            rcmail.http_request('plugin.elfinder.load_attachments',
                                                { _id:rcmail.env.compose_id,
                                                  _uploadid:ts,
-                                                 _filepath:files[id],
+                                                 _filepath:files[id].url,
                                                });
                        }
                        displayed = false;
@@ -106,7 +106,7 @@ if (window.rcmail) {
                    getFileCallback : function(folder, fm) {
                     
                    rcmail.http_request('plugin.elfinder.save_attachments',
-                                        { _dirpath:folder,
+                                        { _dirpath:folder.url,
                                           _uid:msg_uid,
                                           _attachment_id:attachment_id });
                    displayed = false;
