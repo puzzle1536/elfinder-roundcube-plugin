@@ -53,7 +53,9 @@ class elfinder extends rcube_plugin
           'label'      => 'elfinder.save_all',
           'name'       => 'elfinder',
           'command'    => 'briefcase-save-all',
-          'class'      => 'icon active',
+          'class'      => 'icon inactive',
+          'classpas'   => 'icon inactive',
+          'classact'   => 'icon active',
           'innerclass' => 'icon briefcase',
           'wrapper'    => 'li',
       ), 'messagemenu');
@@ -107,8 +109,8 @@ class elfinder extends rcube_plugin
         $files_url  = $rcmail->config->get('files_url');
 
         // Convert and secure provided path
-        $dirpath = urldecode(get_input_value('_dirpath', RCUBE_INPUT_GET));
-        $dirpath = $files_path . str_replace($files_url, "", $dirpath);
+        $relpath = urldecode(get_input_value('_dirpath', RCUBE_INPUT_GET));
+        $dirpath = $files_path . str_replace($files_url, "", $relpath);
         $dirpath = str_replace("..", "", $dirpath);
 
         $uid     = get_input_value('_uid', RCUBE_INPUT_GET);
@@ -135,10 +137,10 @@ class elfinder extends rcube_plugin
                     $imap->get_message_part($message->uid, $part->mime_id, $part, null, $fp, true);
                     fclose($fp);
                 }
-                $rcmail->output->show_message("\"".$disp_name."\" saved to ".$dirpath, 'confirmation');
+                $rcmail->output->show_message("\"".$disp_name."\" saved to ".$relpath, 'confirmation');
             }
         } else {
-            $rcmail->output->show_message("\"$filepath\" is not a folder", 'error');
+            $rcmail->output->show_message("\"$relpath\" is not a valid folder", 'error');
         }
         $rcmail->output->send('iframe');
     }
