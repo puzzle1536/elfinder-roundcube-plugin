@@ -2,27 +2,63 @@
 <html>
 <head>
 <title><roundcube:object name="pagetitle" /></title>
+<script type="text/javascript" src="https://tinymce.cachefly.net/4.0/tinymce.min.js"></script>
 <roundcube:include file="/includes/links.html" />
 </head>
-<script>
-if (window.rcmail) {
+<script type="text/javascript">
+  if (window.rcmail) {
     $(document).ready(function() {
-           dialog = $('#mainscreen').elfinder({
-                   url : 'plugins/elfinder/php/connector.php',
-                   lang : 'en',
-                   defaultView : 'list',
-                   width: $("#mainscreen").innerWidth()-2,
-                   height: $("#mainscreen").innerHeight()-2,
-                   commands : [
-                       'open', 'reload', 'home', 'up', 'back', 'forward',
-                       'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy', 
-                       'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help',
-                       'resize', 'sort'
-                   ],
-            });
+      dialog = $('#mainscreen').elfinder({
+        url : 'plugins/elfinder/php/connector.php',
+        lang : 'en',
+        defaultView : 'list',
+        width: $("#mainscreen").innerWidth()-2,
+        height: $("#mainscreen").innerHeight()-2,
+        commands : [
+          'open', 'reload', 'home', 'up', 'back', 'forward',
+          'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy', 
+          'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help',
+          'resize', 'sort'
+        ],
+  
+        commandsOptions : {
+          edit : {
+            dialogWidth: $("#mainscreen").innerWidth()-70,
+            mimes : ['text/plain', 'text/html'],  // add here other mimes if required
+            editors : [
+              {
+                mimes : ['text/plain', 'text/html'],  // add here other mimes if required
+                load : function(textarea) {
+                  tinymce.execCommand('mceAddEditor', false, textarea.id);
+                },
+                close : function(textarea, instance) {
+                  tinymce.execCommand('mceRemoveEditor', false, textarea.id);
+                },
+                save : function(textarea, editor) {
+                  textarea.value = tinymce.get(textarea.id).selection.getContent({format : 'html'});
+                  tinymce.execCommand('mceRemoveEditor', false, textarea.id);
+                }
+              },
+            ]
+          }
+        }
+      });
 
+      tinymce.init({
+        height: $("#mainscreen").innerHeight()-200,
+        plugins : 'link image lists emoticons textcolor table save print',
+        toolbar: [
+          "save | print | undo redo | styleselect | forecolor backcolor |\
+           link image | table | emoticons"
+        ],
+        save_enablewhendirty: true,
+        save_onsavecallback: function() {console.log("Save");},
+        menubar: false,
+        statusbar: false,
+        resize: false,
+      });
     })
-}
+  }
 </script>
 <body>
 

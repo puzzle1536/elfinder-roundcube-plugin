@@ -15,7 +15,11 @@
 class elfinder extends rcube_plugin
 {
 //    public $task = 'mail';
+    // all task excluding 'login' and 'logout'
     public $task = '?(?!login|logout).*';
+
+    // skip frames
+    public $noframe = true;
 
     function init()
     {
@@ -34,7 +38,7 @@ class elfinder extends rcube_plugin
 
       // register actions
       $this->register_task('elfinder');
-      $this->register_action('index', array($this, 'action'));
+      $this->register_action('index', array($this, 'elfinder_action'));
       $this->add_texts('localization/', false);
 
       // add taskbar button
@@ -77,12 +81,14 @@ class elfinder extends rcube_plugin
 
     }
 
-    function action()
+    function elfinder_action()
     {
         $rcmail = rcmail::get_instance();
 
-        $rcmail->output->set_pagetitle('File Manager');
+        // Add tinyMCE editor to 'elfinder' page
+        //$rcmail->html_editor();
 
+        $rcmail->output->set_pagetitle('File Manager');
         $rcmail->output->send('elfinder.elfinder');
     }
 
