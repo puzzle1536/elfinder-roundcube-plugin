@@ -1,6 +1,6 @@
 /*!
  * elFinder - file manager for web
- * Version 2.0.2 (2014-04-23)
+ * Version 2.0.2 (2014-06-11)
  * http://elfinder.org
  * 
  * Copyright 2009-2013, Studio 42
@@ -3338,7 +3338,7 @@ elFinder.prototype._options = {
 	 * @type Number
 	 * @default  "auto"
 	 */
-	height : 'auto',
+	height : 400,
 	
 	/**
 	 * Make elFinder resizable if jquery ui resizable available
@@ -7739,7 +7739,10 @@ elFinder.prototype.commands.edit = function() {
 				},
 				opts = {
 					title   : file.name,
+					top   : self.options.dialogTop || 0,
+					left  : self.options.dialogLeft || 0,
 					width   : self.options.dialogWidth || 450,
+					height  : self.options.dialogHeight || 450,
 					buttons : {},
 					close   : function() { 
 						ta.editor && ta.editor.close(ta[0], ta.editor.instance);
@@ -7806,7 +7809,7 @@ elFinder.prototype.commands.edit = function() {
 					})
 				}
 				
-				opts.buttons[fm.i18n('Save')]   = save;
+				opts.buttons[fm.i18n('Save & Quit')]   = save;
 				opts.buttons[fm.i18n('Cancel')] = cancel
 				
 				fm.dialog(ta, opts).attr('id', id);
@@ -7912,6 +7915,7 @@ elFinder.prototype.commands.edit = function() {
 	}
 
 }
+
 
 /*
  * File: /home/puzzle/dev/elFinder/js/commands/extract.js

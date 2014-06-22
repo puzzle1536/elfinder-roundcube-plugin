@@ -21,6 +21,8 @@ ul.toolbarmenu li span.briefcase {
 
 .elfinder-contextmenu .elfinder-contextmenu-item span { font-size:1em; }
 
+.elfinder-file-edit { font-size:15px; }
+
 .elfinder-cwd-file-wrapper { font-size:1em;font-weight:normal;}
 .elfinder-cwd-view-list td { font-size:1em; font-weight:normal}
 .elfinder-cwd table td.ui-state-hover {font-weight:1em; font-weight:normal}

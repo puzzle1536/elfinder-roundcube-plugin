@@ -87,6 +87,8 @@ class elfinder extends rcube_plugin
 
         // Add tinyMCE editor to 'elfinder' page
         //$rcmail->html_editor();
+        $this->include_script("js/tinymce/tinymce.min.js");
+        $this->include_script("webodf.js");
 
         $rcmail->output->set_pagetitle('File Manager');
         $rcmail->output->send('elfinder.elfinder');

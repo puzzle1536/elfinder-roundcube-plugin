@@ -2,7 +2,6 @@
 <html>
 <head>
 <title><roundcube:object name="pagetitle" /></title>
-<script type="text/javascript" src="https://tinymce.cachefly.net/4.0/tinymce.min.js"></script>
 <roundcube:include file="/includes/links.html" />
 </head>
 <script type="text/javascript">
@@ -23,20 +22,21 @@
   
         commandsOptions : {
           edit : {
-            dialogWidth: $("#mainscreen").innerWidth()-70,
-            mimes : ['text/plain', 'text/html'],  // add here other mimes if required
+            dialogWidth: $("#mainscreen").innerWidth()-10,
+            dialogHeight: $("#mainscreen").innerHeight()-10,
             editors : [
-              {
-                mimes : ['text/plain', 'text/html'],  // add here other mimes if required
+              { mimes : ['text/plain'], },
+              { mimes : ['text/plain'], },
+              { mimes : ['text/html'],
                 load : function(textarea) {
+                //  textarea.rows = 25;
                   tinymce.execCommand('mceAddEditor', false, textarea.id);
                 },
                 close : function(textarea, instance) {
                   tinymce.execCommand('mceRemoveEditor', false, textarea.id);
                 },
-                save : function(textarea, editor) {
-                  textarea.value = tinymce.get(textarea.id).selection.getContent({format : 'html'});
-                  tinymce.execCommand('mceRemoveEditor', false, textarea.id);
+                save : function(textarea, instance) {
+                  tinymce.execCommand('mceSave', false, textarea.id);
                 }
               },
             ]
@@ -45,18 +45,24 @@
       });
 
       tinymce.init({
-        height: $("#mainscreen").innerHeight()-200,
-        plugins : 'link image lists emoticons textcolor table save print',
+        plugins : 'link image lists emoticons textcolor table print',
         toolbar: [
-          "save | print | undo redo | styleselect | forecolor backcolor |\
+          "print | undo redo | styleselect | forecolor backcolor |\
            link image | table | emoticons"
         ],
-        save_enablewhendirty: true,
-        save_onsavecallback: function() {console.log("Save");},
+//        save_enablewhendirty: true,
+//        save_onsavecallback: function() {
+//          // Must do sthg clever here !
+//          console.log("save_onsavecallback");
+//        },
         menubar: false,
         statusbar: false,
         resize: false,
       });
+
+//    var odfcanvas = new odf.OdfCanvas(document.getElementById("mainscreen"));
+//    odfcanvas.load("/files/convention.ods");
+
     })
   }
 </script>
