@@ -3,20 +3,25 @@
 	left: 40px;
 }
 
-#taskbar a.button-elfinder span.button-inner {
+#mailtoolbar a.button-elfinder {
 	background: url(elfinder.png) 0 0 no-repeat;
-	height: 19px;
+}
+
+#mailtoolbar a.button-elfinder:hover {
+	background: url(elfinder.png) 0 -40px no-repeat;
+}
+
+#taskbar a.button-elfinder span.button-inner {
+	background: url(elfinder.png) -15px 0 no-repeat;
 }
 
 #taskbar a.button-elfinder:hover span.button-inner,
 #taskbar a.button-elfinder.button-selected span.button-inner {
-	background: url(elfinder.png) 0 -24px no-repeat;
-	height: 19px;
+	background: url(elfinder.png) -15px -40px no-repeat;
 }
 
 ul.toolbarmenu li span.elfinder {
-	background: url(elfinder.png) -2px -50px no-repeat;
-	height: 9px;
+	background: url(elfinder.png) -15px -82px no-repeat;
 }
 
 .elfinder-contextmenu .elfinder-contextmenu-item span { font-size:1em; }

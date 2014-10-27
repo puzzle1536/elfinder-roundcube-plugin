@@ -23,6 +23,8 @@ class elfinder extends rcube_plugin
 
     function init()
     {
+      $rcmail = rcmail::get_instance();
+
       // Include elfinder js & css
       $this->include_stylesheet($this->local_skin_path() . "/css/elfinder.full.css");
       $this->include_stylesheet($this->local_skin_path() . "/css/theme.css");
@@ -49,6 +51,18 @@ class elfinder extends rcube_plugin
           'innerclass' => 'button-inner',
           'label'      => 'elfinder.elfinder',
       ), 'taskbar');
+
+      // add compose toolbar button
+      if ($rcmail->action == 'compose') {
+            $this->add_button(array(
+                'name'       => 'elfinder',
+                'type'       => 'link',
+                'class'      => 'button button-elfinder',
+                'classact'   => 'button button-elfinder button-selected',
+                'label'      => 'elfinder.elfinder',
+                'onclick'    => "window.parent.elfinder_load(); return false",
+            ), 'toolbar');
+      }
 
       // add button to messagemenu
       $this->add_button(array(
