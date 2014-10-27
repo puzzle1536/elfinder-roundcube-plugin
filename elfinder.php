@@ -31,7 +31,7 @@ class elfinder extends rcube_plugin
       $this->include_script("elfinder.js");
 
       // Register hooks and actions
-      $this->register_action('plugin.elfinder.save_attachments', array($this, 'save_attachements'));
+      $this->register_action('plugin.elfinder.save_attachments', array($this, 'save_attachments'));
       $this->register_action('plugin.elfinder.load_attachments', array($this, 'load_attachments'));
 
       $this->add_hook('template_object_composeattachmentlist', array($this, 'add_attachment_elfinder'));
@@ -52,27 +52,27 @@ class elfinder extends rcube_plugin
 
       // add button to messagemenu
       $this->add_button(array(
-          'id'         => 'messagemenubriefcase',
+          'id'         => 'messagemenuelfinder',
           'type'       => 'link',
           'label'      => 'elfinder.save_all',
           'name'       => 'elfinder',
-          'command'    => 'briefcase-save-all',
+          'command'    => 'elfinder-save-all',
           'class'      => 'icon inactive',
           'classpas'   => 'icon inactive',
           'classact'   => 'icon active',
-          'innerclass' => 'icon briefcase',
+          'innerclass' => 'icon elfinder',
           'wrapper'    => 'li',
       ), 'messagemenu');
 
       // add button to attachmentmenu
       $this->add_button(array(
-          'id'         => 'attachmenubriefcase',
+          'id'         => 'attachmenuelfinder',
           'type'       => 'link',
-          'label'      => 'elfinder.briefcase',
+          'label'      => 'elfinder.save',
           'name'       => 'elfinder',
-          'command'    => 'briefcase-save',
+          'command'    => 'elfinder-save',
           'class'      => 'icon active',
-          'innerclass' => 'icon briefcase',
+          'innerclass' => 'icon elfinder',
           'wrapper'    => 'li',
       ), 'attachmentmenu');
 
@@ -88,9 +88,8 @@ class elfinder extends rcube_plugin
         // Add tinyMCE editor to 'elfinder' page
         //$rcmail->html_editor();
         $this->include_script("js/tinymce/tinymce.min.js");
-        $this->include_script("webodf.js");
 
-        $rcmail->output->set_pagetitle('File Manager');
+        $rcmail->output->set_pagetitle('elFinder');
         $rcmail->output->send('elfinder.elfinder');
     }
 
@@ -99,8 +98,8 @@ class elfinder extends rcube_plugin
      */
     public function add_attachment_elfinder($p)
     {
-        $p['content'] = "<input type=\"button\" class=\"button\" value=\"Briefcase\"".
-                        "onclick=\"briefcase_load();return false\">".$p['content'];
+        $p['content'] = "<input type=\"button\" class=\"button\" value=\"elFinder\"".
+                        "onclick=\"elfinder_load();return false\">".$p['content'];
 
         return $p;
     }
@@ -108,7 +107,7 @@ class elfinder extends rcube_plugin
     /**
      * Handler for attachment save action
      */
-    public function save_attachements()
+    public function save_attachments()
     {
         $rcmail = rcmail::get_instance();
         $rcmail->output->reset();

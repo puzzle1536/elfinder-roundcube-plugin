@@ -17,8 +17,8 @@
 */
 
 $labels = array();
-$labels['elfinder'] = 'File Manager';
-$labels['briefcase'] = 'Briefcase';
-$labels['save_all'] = 'Briefcase';
+$labels['elfinder'] = 'elFinder';
+$labels['save'] = 'elFinder';
+$labels['save_all'] = 'elFinder';
 
 ?>

@@ -3,23 +3,23 @@ var displayed;
 var selected_attachment_id = 0;
 var selected_message_id = 0;
 
-var briefcase_init = function() {
+var elfinder_init = function() {
 
     // Add <div> element for elfinder
     $( "#mainscreen" ).append( "<div id=\"elfinder\" class=\"popupmenu elfinder-popup\"></div>" );
 
     selected_message_id = rcmail.env.uid;
 
-    // Register function for clicks on message menu 'Briefcase'
-    rcmail.register_command('briefcase-save-all', function() {
+    // Register function for clicks on message menu 'elFinder'
+    rcmail.register_command('elfinder-save-all', function() {
          // We set selected_attachment_id to 0, to save all attachments
          selected_attachment_id =  0;
-         window.parent.briefcase_save();
+         window.parent.elfinder_save();
     }, !rcmail.message_list);
 
-    // Register function for clicks on attachment menu 'Briefcase'
-    rcmail.register_command('briefcase-save', function() {
-         window.parent.briefcase_save();
+    // Register function for clicks on attachment menu 'elFinder'
+    rcmail.register_command('elfinder-save', function() {
+         window.parent.elfinder_save();
     }, true);
 
     // Add event listener on attachement menu open to store the correct attachment id
@@ -27,18 +27,18 @@ var briefcase_init = function() {
         window.parent.selected_attachment_id = p.props.id;
     });
 
-    // Add event listener to enable/disable 'briefcase' menu in message menu
+    // Add event listener to enable/disable 'elfinder' menu in message menu
     if (rcmail.message_list) {
         rcmail.message_list.addEventListener('select', function(list) {
-            rcmail.enable_command('briefcase-save-all', list.get_selection().length == 1);
+            rcmail.enable_command('elfinder-save-all', list.get_selection().length == 1);
             selected_message_id = list.get_selection()[0];
         });
     }
 }
 
-var briefcase_load = function(elfinder_function) {
+var elfinder_load = function(elfinder_function) {
    if (!dialog) {
-       // Somebody clicked on the "briefcase" button for the 1st time
+       // Somebody clicked on the "elfinder" button for the 1st time
        // Just open the elfinder window
 
        dialog = $('#elfinder').elfinder({
@@ -90,7 +90,7 @@ var briefcase_load = function(elfinder_function) {
         });
         displayed = true;
     } else {
-       // Somebody clicked on the "briefcase" button, toggle display
+       // Somebody clicked on the "elfinder" button, toggle display
        if (!displayed) {
            dialog.elfinder('show');
            displayed = true;
@@ -101,9 +101,9 @@ var briefcase_load = function(elfinder_function) {
     }
 }
 
-var briefcase_save = function() {
+var elfinder_save = function() {
    if (!dialog) {
-       // Somebody clicked on the "briefcase" button for the 1st time
+       // Somebody clicked on the "elfinder" button for the 1st time
        // Just open the elfinder window
 
        dialog = $('#elfinder').elfinder({
@@ -147,7 +147,7 @@ var briefcase_save = function() {
         });
         displayed = true;
     } else {
-       // Somebody clicked on the "briefcase" button, toggle display
+       // Somebody clicked on the "elfinder" button, toggle display
        if (!displayed) {
            dialog.elfinder('show');
            displayed = true;
@@ -169,8 +169,8 @@ var grab_excape_key = function(evt) {
     
 $(document).ready(function() {
     if (window.rcmail) {
-        // Register briefcase_init function and hook keypress event
-        rcmail.addEventListener('init', briefcase_init);
+        // Register elfinder_init function and hook keypress event
+        rcmail.addEventListener('init', elfinder_init);
         window.onkeypress = grab_excape_key;
     }
 });

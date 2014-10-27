@@ -17,8 +17,8 @@
 */
 
 $labels = array();
-$labels['elfinder'] = 'Gestionaire de fichier';
-$labels['briefcase'] = 'Porte-Document';
-$labels['save_all'] = 'Porte-Document';
+$labels['elfinder'] = 'elFinder';
+$labels['save'] = 'elFinder';
+$labels['save_all'] = 'elFinder';
 
 ?>
