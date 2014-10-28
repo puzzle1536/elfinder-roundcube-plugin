@@ -17,8 +17,13 @@
 */
 
 $labels = array();
-$labels['elfinder'] = 'elFinder';
-$labels['save'] = 'elFinder';
-$labels['save_all'] = 'elFinder';
+$labels['elfinder'] = 'Gestionnaire de Fichier';
+$labels['save'] = 'Enrgistrer le fichier (elFinder)';
+$labels['save_all'] = 'Enregistrer les pièces jointes (elFinder)';
+$labels['save_msg'] = 'Enregistrer le(s) message(s) (elFinder)';
+
+$messages = array();
+$messages['wait_save'] = 'Enregistrement des fichier(s) (elFinder) ...';
+$messages['wait_load'] = 'Chargement des fichier(s) (elFinder) ...';
 
 ?>

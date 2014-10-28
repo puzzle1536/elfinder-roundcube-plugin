@@ -2,6 +2,7 @@ var dialog;
 var displayed;
 var selected_attachment_id = 0;
 var selected_message_id = 0;
+var selected_function = 'plugin.elfinder.save_attachments';
 
 var elfinder_init = function() {
 
@@ -10,15 +11,23 @@ var elfinder_init = function() {
 
     selected_message_id = rcmail.env.uid;
 
-    // Register function for clicks on message menu 'elFinder'
+    // Register function for clicks on message menu 'elFinder (save msg)'
+    rcmail.register_command('elfinder-save-msg', function() {
+         selected_function = 'plugin.elfinder.save_messages';
+         window.parent.elfinder_save();
+    }, !rcmail.message_list);
+
+    // Register function for clicks on message menu 'elFinder (attachments)'
     rcmail.register_command('elfinder-save-all', function() {
          // We set selected_attachment_id to 0, to save all attachments
+         selected_function = 'plugin.elfinder.save_attachments';
          selected_attachment_id =  0;
          window.parent.elfinder_save();
     }, !rcmail.message_list);
 
     // Register function for clicks on attachment menu 'elFinder'
     rcmail.register_command('elfinder-save', function() {
+         selected_function = 'plugin.elfinder.save_attachments';
          window.parent.elfinder_save();
     }, true);
 
@@ -30,10 +39,12 @@ var elfinder_init = function() {
     // Add event listener to enable/disable 'elfinder' menu in message menu
     if (rcmail.message_list) {
         rcmail.message_list.addEventListener('select', function(list) {
-            rcmail.enable_command('elfinder-save-all', list.get_selection().length == 1);
-            selected_message_id = list.get_selection()[0];
+            rcmail.enable_command('elfinder-save-all', list.get_selection().length > 0);
+            rcmail.enable_command('elfinder-save-msg', list.get_selection().length > 0);
+            selected_message_id = list.get_selection();
         });
     }
+
 }
 
 var elfinder_load = function(elfinder_function) {
@@ -78,12 +89,14 @@ var elfinder_load = function(elfinder_function) {
                getFileCallback : function(files, fm) {
                 
                    for (id in files) {
-                       ts = new Date().getTime()
+                       // Lock interface while saving
+                       lock = rcmail.set_busy(true, 'elfinder.wait_load');
+                       ts = new Date().getTime();
                        rcmail.http_request('plugin.elfinder.load_attachments',
                                            { _id:rcmail.env.compose_id,
                                              _uploadid:ts,
                                              _filepath:files[id].url,
-                                           });
+                                           }, lock);
                    }
                    displayed = false;
             }
@@ -112,6 +125,9 @@ var elfinder_save = function() {
                width:  $("#mainscreen").innerWidth()-100,
                height: $("#mainscreen").innerHeight()-100,
                defaultView : 'list',
+               uiOptions: {
+                   cwd : {oldSchool : true}
+               },
                commandsOptions : {
                    getfile : {
                        oncomplete : 'close',
@@ -137,10 +153,12 @@ var elfinder_save = function() {
                },
                getFileCallback : function(folder, fm) {
                 
-               rcmail.http_request('plugin.elfinder.save_attachments',
+               // Lock interface while saving
+               lock = rcmail.set_busy(true, 'elfinder.wait_save');
+               rcmail.http_request(selected_function,
                                     { _dirpath:folder.url,
                                       _uid:selected_message_id,
-                                      _attachment_id:selected_attachment_id });
+                                      _attachment_id:selected_attachment_id }, lock);
                displayed = false;
 
             }

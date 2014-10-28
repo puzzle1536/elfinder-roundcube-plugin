@@ -14,7 +14,6 @@
 
 class elfinder extends rcube_plugin
 {
-//    public $task = 'mail';
     // all task excluding 'login' and 'logout'
     public $task = '?(?!login|logout).*';
 
@@ -34,14 +33,20 @@ class elfinder extends rcube_plugin
 
       // Register hooks and actions
       $this->register_action('plugin.elfinder.save_attachments', array($this, 'save_attachments'));
+      $this->register_action('plugin.elfinder.save_messages', array($this, 'save_messages'));
       $this->register_action('plugin.elfinder.load_attachments', array($this, 'load_attachments'));
 
-      $this->add_hook('template_object_composeattachmentlist', array($this, 'add_attachment_elfinder'));
+      // Hack for custom skins
+      if (strcmp($rcmail->config->get('skin'),"roundcube-skin-for-netbook") == 0) {
+          $this->add_hook('template_object_composeattachmentlist', array($this, 'add_attachment_elfinder'));
+      }
 
       // register actions
       $this->register_task('elfinder');
       $this->register_action('index', array($this, 'elfinder_action'));
-      $this->add_texts('localization/', false);
+
+      // Add localized strings
+      $this->add_texts('localization/', array('wait_load', 'wait_save'));
 
       // add taskbar button
       $this->add_button(array(
@@ -66,7 +71,21 @@ class elfinder extends rcube_plugin
 
       // add button to messagemenu
       $this->add_button(array(
-          'id'         => 'messagemenuelfinder',
+          'id'         => 'messagemenu_elfinder_save_msg',
+          'type'       => 'link',
+          'label'      => 'elfinder.save_msg',
+          'name'       => 'elfinder',
+          'command'    => 'elfinder-save-msg',
+          'class'      => 'icon inactive',
+          'classpas'   => 'icon inactive',
+          'classact'   => 'icon active',
+          'innerclass' => 'icon elfinder',
+          'wrapper'    => 'li',
+      ), 'messagemenu');
+
+      // add button to messagemenu
+      $this->add_button(array(
+          'id'         => 'messagemenu_elfinder_save_all',
           'type'       => 'link',
           'label'      => 'elfinder.save_all',
           'name'       => 'elfinder',
@@ -119,6 +138,47 @@ class elfinder extends rcube_plugin
     }
 
     /**
+     * Handler for message save action
+     */
+    public function save_messages()
+    {
+        $rcmail = rcmail::get_instance();
+        $rcmail->output->reset();
+
+        $files_path = $rcmail->config->get('files_path');
+        $files_url  = $rcmail->config->get('files_url');
+
+        // Convert and secure provided path
+        $relpath = urldecode(get_input_value('_dirpath', RCUBE_INPUT_GET));
+        $dirpath = $files_path . str_replace($files_url, "", $relpath);
+        $dirpath = str_replace("..", "", $dirpath);
+
+        $uid_array = get_input_value('_uid', RCUBE_INPUT_GET);
+ 
+        // Check if we receive an array of msg uid or only one
+        if (!is_array($uid_array)) {
+            $uid_array = array ($uid_array);
+        }
+
+        if (is_dir($dirpath)) {
+            foreach ($uid_array as $uid) {
+                $message = new rcube_message($uid);
+                // We request to save message eml
+                $filename = $message->subject . '.eml';
+                
+                $fp = fopen($dirpath.'/'.$filename, 'w');
+                $rcmail->storage->get_raw_body($message->uid, $fp);
+                fclose($fp);
+             
+                $rcmail->output->show_message("\"".$filename."\" saved to ".$relpath, 'confirmation');
+            }
+        } else {
+            $rcmail->output->show_message("\"$relpath\" is not a valid folder", 'error');
+        }
+        $rcmail->output->send('iframe');
+    }
+
+    /**
      * Handler for attachment save action
      */
     public function save_attachments()
@@ -134,31 +194,39 @@ class elfinder extends rcube_plugin
         $dirpath = $files_path . str_replace($files_url, "", $relpath);
         $dirpath = str_replace("..", "", $dirpath);
 
-        $uid     = get_input_value('_uid', RCUBE_INPUT_GET);
+        $uid_array = get_input_value('_uid', RCUBE_INPUT_GET);
         $attach_id = get_input_value('_attachment_id', RCUBE_INPUT_GET);
-        $message = new rcube_message($uid);
-        $imap = $rcmail->storage;
+
+        // Check if we receive an array of msg uid or only one
+        if (!is_array($uid_array)) {
+            $uid_array = array ($uid_array);
+        }
 
         if (is_dir($dirpath)) {
-            foreach ($message->attachments as $part) {
-                $pid = $part->mime_id;
+            foreach ($uid_array as $uid) {
+                // We request to save message attachments
+                $message = new rcube_message($uid);
 
-                if ($attach_id && ($pid != $attach_id))
-					continue;
-
-                $part = $message->mime_parts[$pid];
-                $disp_name = $part->filename;
-                
-                if ($part->body) {
-                    $fp = fopen($dirpath.'/'.$disp_name, 'w');
-                    fwrite($fp, $part->body);
-                    fclose($fp);
-                } else {
-                    $fp = fopen($dirpath.'/'.$disp_name, 'w');
-                    $imap->get_message_part($message->uid, $part->mime_id, $part, null, $fp, true);
-                    fclose($fp);
+                foreach ($message->attachments as $part) {
+                    $pid = $part->mime_id;
+             
+                    if ($attach_id && ($pid != $attach_id))
+                        continue;
+             
+                    $part = $message->mime_parts[$pid];
+                    $disp_name = $part->filename;
+                    
+                    if ($part->body) {
+                        $fp = fopen($dirpath.'/'.$disp_name, 'w');
+                        fwrite($fp, $part->body);
+                        fclose($fp);
+                    } else {
+                        $fp = fopen($dirpath.'/'.$disp_name, 'w');
+                        $rcmail->storage->get_message_part($uid, $part->mime_id, $part, null, $fp, true);
+                        fclose($fp);
+                    }
+                    $rcmail->output->show_message("\"".$disp_name."\" saved to ".$relpath, 'confirmation');
                 }
-                $rcmail->output->show_message("\"".$disp_name."\" saved to ".$relpath, 'confirmation');
             }
         } else {
             $rcmail->output->show_message("\"$relpath\" is not a valid folder", 'error');
@@ -175,6 +243,11 @@ class elfinder extends rcube_plugin
 
         $files_path = $rcmail->config->get('files_path');
         $files_url  = $rcmail->config->get('files_url');
+
+        $rcmail->output->reset();
+            $rcmail->output->show_message("\"$file_path\" is not a file", 'error');
+            $rcmail->output->send('iframe');
+return;
 
         // Convert and secure provided path
         $filepath = urldecode(get_input_value('_filepath', RCUBE_INPUT_GET));
@@ -196,6 +269,9 @@ class elfinder extends rcube_plugin
         }
 
         $rcmail->output->reset();
+            $rcmail->output->show_message("\"$filepath\" is not a file", 'error');
+            $rcmail->output->send('iframe');
+return;
 
         if (is_file($filepath)) {
 

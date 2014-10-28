@@ -17,8 +17,13 @@
 */
 
 $labels = array();
-$labels['elfinder'] = 'elFinder';
-$labels['save'] = 'elFinder';
-$labels['save_all'] = 'elFinder';
+$labels['elfinder'] = 'File Manager';
+$labels['save'] = 'Save file (elFinder)';
+$labels['save_all'] = 'Save attachments (elFinder)';
+$labels['save_msg'] = 'Save message(s) (elFinder)';
+
+$messages = array();
+$messages['wait_save'] = 'Saving file(s) (elFinder) ...';
+$messages['wait_load'] = 'Loading file(s) (elFinder) ...';
 
 ?>
