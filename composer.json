@@ -1,10 +1,10 @@
 {
     "name": "elfinder",
-    "description": "Plugin to embed elFinder into RoundCube",
+    "description": "Plugin to embed elFinder File Manager into RoundCube",
     "license": "GPL-3.0+",
     "version": "0.1",
     "type": "roundcube-plugin",
-    "homepage": "https://github.com/puzzle1536/elfinder-roundcube-plugin",
+    "homepage": "https://github.com/puzzle1536/elfinder-roundcube-plugin.git",
     "authors": [
         {
             "name": "Puzzle",

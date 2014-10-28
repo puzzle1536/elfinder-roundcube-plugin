@@ -1,11 +1,13 @@
 elFinder Roundcube Plugin
 -------------------------
 
-This roundcube plugin integrates elFinder file Manager to Roundcube
-It has been tested on Roundcube 1.0.0 only.
+This roundcube plugin integrates elFinder File Manager to Roundcube.
+It has only been tested on Roundcube 1.0.0 and is based on elFinder 2.x as-up
+2014-10-09.
 
-Please note this plugin is not mean to work
-There may be security flows
+**Please note this plugin is not intended to be used in a multi-user RC
+installation. There are several security issues using it that way. Use at your
+own risk!**
 
 Installation
 ------------
@@ -16,8 +18,17 @@ The plugin folder must be named `elfinder`.
 
 Add `elfinder` to `$rcmail_config['plugins']` in `config/config.inc.php`.
 
+You can use config.inc.php.dist as an example for configuration.
+Update the file and rename it to `config.inc.php`.
+
 Usage
 -----
+When listing or reading messages. you'll be able to save attachments to the
+server filesystem.  When composing messages, you'll be able to save attachments
+to the server filesystem.  The `File Manager` tab allows you to browse these
+files later.
+
+You may reconfigure elFinder for your own requirements through `php/` subfolder.
 
 Contact
 -------

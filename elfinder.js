@@ -8,7 +8,7 @@
  * @version 0.1
  * @author puzzle1536@gmail.com
  * @licence GNU GPLv3+
- * @url http://github.com/puzzle1536/elfinder-roundcube-plugin
+ * @url http://github.com/puzzle1536/elfinder-roundcube-plugin.git
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
