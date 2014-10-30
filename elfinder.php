@@ -33,15 +33,12 @@ class elfinder extends rcube_plugin
     // all task excluding 'login' and 'logout'
     public $task = '?(?!login|logout).*';
 
-    // skip frames
-    public $noframe = true;
-
     function init()
     {
       $rcmail = rcmail::get_instance();
 
       // Include elfinder js & css
-      $this->include_stylesheet($this->local_skin_path() . "/css/elfinder.full.css");
+      $this->include_stylesheet($this->local_skin_path() . "/css/elfinder.min.css");
       $this->include_stylesheet($this->local_skin_path() . "/css/theme.css");
       $this->include_stylesheet($this->local_skin_path() . "/elfinder.css");
       $this->include_script("js/elfinder.min.js");
