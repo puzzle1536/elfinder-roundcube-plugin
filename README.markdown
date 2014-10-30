@@ -1,13 +1,17 @@
 elFinder Roundcube Plugin
 -------------------------
 
-This roundcube plugin integrates elFinder File Manager to Roundcube.
-It has only been tested on Roundcube 1.0.0 and is based on elFinder 2.x as-up
-2014-10-09.
+This roundcube plugin integrates the elFinder File Manager to Roundcube. 
+It has only been tested on Roundcube 1.0.0 and is based on elFinder 2.x git
+version as-up 2014-10-09.
 
-**Please note this plugin is not intended to be used in a multi-user RC
-installation. There are several security issues using it that way. Use at your
-own risk!**
+This plugin enables browsing files available on the server within RoundCube.
+It also enables therefore the possibility to add attachments from the server
+filesystem and save mails or attachments to the server filesystem.
+
+**Please note this plugin is not yet intended to be used in a multi-user RC
+installation. This would lead to serious security issue using it that way.
+Use at your own risk!**
 
 Installation
 ------------
@@ -23,10 +27,13 @@ Update the file and rename it to `config.inc.php`.
 
 Usage
 -----
-When listing or reading messages. you'll be able to save attachments to the
-server filesystem.  When composing messages, you'll be able to save attachments
-to the server filesystem.  The `File Manager` tab allows you to browse these
-files later.
+This plugin enables the following actions :
+ * `Save message(s) (elFinder)` : Save mails to elFinder when reading or listing mails,
+ * `Save attachment(s) (elFinder)` : Save attachments to elFinder when reading or listing mails,
+ * Load attachments from elFinder when composing mail,
+ * Browse server files from a dedicated `File Manager` tab,
+ * Online Edit text files within elFinder tab.
+ * Online html files within elFinder tab (with tinyMCE 4.x) .
 
 You may reconfigure elFinder for your own requirements through `php/` subfolder.
 
