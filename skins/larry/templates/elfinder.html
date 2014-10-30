@@ -22,14 +22,12 @@
   
         commandsOptions : {
           edit : {
-            dialogWidth: $("#mainscreen").innerWidth()-10,
-            dialogHeight: $("#mainscreen").innerHeight()-10,
+            dialogWidth: $("#mainscreen").innerWidth()-50,
+            dialogHeight: $("#mainscreen").innerHeight()-50,
             editors : [
-              { mimes : ['text/plain'], },
               { mimes : ['text/plain'], },
               { mimes : ['text/html'],
                 load : function(textarea) {
-                //  textarea.rows = 25;
                   tinymce.execCommand('mceAddEditor', false, textarea.id);
                 },
                 close : function(textarea, instance) {
@@ -45,16 +43,15 @@
       });
 
       tinymce.init({
-        plugins : 'link image lists emoticons textcolor table print',
+        plugins : 'save link image lists emoticons textcolor table print',
         toolbar: [
           "print | undo redo | styleselect | forecolor backcolor |\
            link image | table | emoticons"
         ],
-//        save_enablewhendirty: true,
-//        save_onsavecallback: function() {
-//          // Must do sthg clever here !
-//          console.log("save_onsavecallback");
-//        },
+        save_enablewhendirty: true,
+        save_onsavecallback: function() {
+          // Should do sthg clever here ?!?
+        },
         menubar: false,
         statusbar: false,
         resize: false,
