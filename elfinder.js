@@ -148,7 +148,7 @@ var elfinder_save = function() {
        // Just open the elfinder window
 
        dialog = $('#elfinder').elfinder({
-               url : 'plugins/elfinder/php/connector.php',
+               url : 'plugins/elfinder/php/connector.minimal.php',
                lang : 'en',
                width:  $("#mainscreen").innerWidth()-100,
                height: $("#mainscreen").innerHeight()-100,
