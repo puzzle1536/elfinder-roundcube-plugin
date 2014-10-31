@@ -1,7 +1,7 @@
 /**
  * elFinder plugin for RoundCube
  *
- * This plugin integrates elFinder into Roundcube for various purpose.
+ * This plugin integrates elFinder File Manager into Roundcube
  *
  * Copyright 2014 - Puzzle <puzzle1536@gmail.com>
  *
@@ -81,7 +81,7 @@ var elfinder_load = function(elfinder_function) {
        // Just open the elfinder window
 
        dialog = $('#elfinder').elfinder({
-               url : 'plugins/elfinder/php/connector.php',
+               url : 'plugins/elfinder/php/connector.minimal.php',
                lang : 'en',
                width:  $("#mainscreen").innerWidth()-100,
                height: $("#mainscreen").innerHeight()-100,

@@ -2,6 +2,8 @@
 
 error_reporting(0); // Set E_ALL for debuging
 
+include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'../config.inc.php';
+
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinder.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeDriver.class.php';
@@ -13,6 +15,35 @@ include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeLocalFileSyste
 
 
 /**
+ * Smart logger function
+ * Demonstrate how to work with elFinder event api
+ *
+ * @param  string   $cmd       command name
+ * @param  array    $result    command result
+ * @param  array    $args      command arguments from client
+ * @param  elFinder $elfinder  elFinder instance
+ * @return void|true
+ * @author Troex Nevelin
+ **/
+function logger($cmd, $result, $args, $elfinder) {
+    global $rcmail_config;
+    if (!$rcmail_config['debug']) {
+        return;
+    }
+    $log = sprintf("[%s] %s: %s \n", date('r'), strtoupper($cmd), var_export($result, true));
+    $logfile = $rcmail_config['logs'];
+    $dir = dirname($logfile);
+    if (!is_dir($dir) && !mkdir($dir)) {
+        return;
+    }
+    if (($fp = fopen($logfile, 'a'))) {
+        fwrite($fp, $log);
+        fclose($fp);
+    }
+    return;
+}
+
+/**
  * Simple function to demonstrate how to control file access using "accessControl" callback.
  * This method will disable accessing files/folders starting from '.' (dot)
  *
@@ -21,24 +52,30 @@ include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeLocalFileSyste
  * @return bool|null
  **/
 function access($attr, $path, $data, $volume) {
-	return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
-		? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
-		:  null;                                    // else elFinder decide it itself
+    return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
+        ? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
+        :  null;                                    // else elFinder decide it itself
 }
 
 
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
 $opts = array(
-	// 'debug' => true,
-	'roots' => array(
-		array(
-			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'          => '../files/',         // path to files (REQUIRED)
-			'URL'           => dirname($_SERVER['PHP_SELF']) . '/../files/', // URL to files (REQUIRED)
-			'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
-		)
-	)
+    'locale' => 'en_US.UTF-8',
+    'bind' => array(
+        '*' => 'logger',
+       // 'mkdir mkfile rename duplicate upload rm paste' => 'logger'
+    ),
+    'debug' => true,
+    'roots' => array(
+        array(
+            'driver'     => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
+            'path'       => $rcmail_config['files_path'],
+            'startPath'  => $rcmail_config['files_path'],
+            'URL'        => $rcmail_config['files_url'],
+            'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
+        )
+    )
 );
 
 // run elFinder

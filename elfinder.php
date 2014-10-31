@@ -3,7 +3,7 @@
 /**
  * elFinder plugin for RoundCube
  *
- * This plugin integrates elFinder into Roundcube for various purpose.
+ * This plugin integrates elFinder File Manager into Roundcube
  *
  * Copyright 2014 - Puzzle <puzzle1536@gmail.com>
  *

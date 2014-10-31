@@ -3,7 +3,7 @@
 /**
  * elFinder plugin for RoundCube
  *
- * plugin that includes elFinder into Roundcube for various purpose
+ * This plugin integrates elFinder File Manager into Roundcube
  *
  * Copyright 2014 - Puzzle <puzzle1536@gmail.com>
  *
@@ -32,5 +32,6 @@
 $rcmail_config['files_path'] = '/my/path/to/files';
 // "Public" URL to get the files from a web browser
 $rcmail_config['files_url']  = '/files';
+$rcmail_config['debug']  = true;
 $rcmail_config['logs']  = '/files/elfinder.log';
 
